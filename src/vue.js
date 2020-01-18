@@ -12,6 +12,7 @@ class Vue {
       // 负责解析模板的内容
       // 需要模板和数据
       new Compile(this.$el, this)
+
     }
   }
 }
