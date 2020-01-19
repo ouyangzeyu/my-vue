@@ -10,8 +10,10 @@
 
 <body>
   <div id="app">
-    <p>{{msg}}</p>
-    <p v-text="msg"></p>
+    <p v-text="msg" title="哈哈"></p>
+    <p v-html="tag" title="呵呵"></p>
+    <input type="text" v-model="msg">
+    <button @click=clickFn>按钮</button>
   </div>
 
   <script src="./src/compile.js"></script>
@@ -20,11 +22,15 @@
     const vm = new Vue({
       el: '#app',
       data: {
-        msg: 'hello vue'
+        msg: 'hello vue',
+        tag: '<h3>这是我的vue</h3>'
+      },
+      methods: {
+        clickFn () {
+          console.log(this.name)
+        }
       }
     })
-
-    console.log(vm)
   </script>
 </body>
 
