@@ -74,7 +74,12 @@ class Compile {
 
   // 解析文本
   compileText(node) {
-
+    let txt = node.textContent
+    let reg = /\{\{(.+)\}\}/ // {{}}插值表达式中可以是一个以上的任意字符
+    if(reg.test(txt)) {
+      let expr = RegExp.$1 // 拿到第一个分组
+      node.textContent = txt.replace(reg, this.vm.$data[expr])
+    }
   }
 
   /* 工具方法 */
