@@ -78,7 +78,7 @@ class Compile {
     let reg = /\{\{(.+)\}\}/ // {{}}插值表达式中可以是一个以上的任意字符
     if(reg.test(txt)) {
       let expr = RegExp.$1 // 拿到第一个分组
-      node.textContent = txt.replace(reg, this.vm.$data[expr])
+      node.textContent = txt.replace(reg, CompileUtils.getVMValue(this.vm, expr))
     }
   }
 
@@ -108,13 +108,13 @@ class Compile {
 /* 对指令的统一处理， */
 let CompileUtils = {
   text(node, vm, expr) {
-    node.textContent = vm.$data[expr]
+    node.textContent = this.getVMValue(vm, expr)
   },
   html(node, vm, expr) {
-    node.innerHTML = vm.$data[expr]
+    node.innerHTML = this.getVMValue(vm, expr)
   },
   model(node, vm, expr) {
-    node.value = vm.$data[expr]
+    node.value = this.getVMValue(vm, expr)
   },
   eventHandler(node, vm, type, expr) {
     // 给当前元素注册事件
@@ -123,5 +123,13 @@ let CompileUtils = {
     if (eventType && fn) {
       node.addEventListener(eventType, fn.bind(vm))
     }
+  },
+  // 用于获取vm中的数据
+  getVMValue (vm, expr) {
+    let data = vm.$data
+    expr.split('.').forEach(key => {
+      data = data[key]
+    })
+    return data
   }
 }

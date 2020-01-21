@@ -16,6 +16,8 @@
     <p v-html="tag" title="呵呵"></p>
     <input type="text" v-model="msg">
     <button v-on:click=clickFn>按钮</button>
+
+    <p>{{car.brand}}</p>
   </div>
 
   <script src="./src/compile.js"></script>
@@ -25,7 +27,11 @@
       el: '#app',
       data: {
         msg: 'hello vue',
-        tag: '<h3>这是我的vue</h3>'
+        tag: '<h3>这是我的vue</h3>',
+        car: {
+          brand: '宝马',
+          color: 'white'
+        }
       },
       methods: {
         clickFn () {
