@@ -13,7 +13,7 @@
     <p v-text="msg" title="哈哈"></p>
     <p v-html="tag" title="呵呵"></p>
     <input type="text" v-model="msg">
-    <button @click=clickFn>按钮</button>
+    <button v-on:click=clickFn>按钮</button>
   </div>
 
   <script src="./src/compile.js"></script>
@@ -27,7 +27,8 @@
       },
       methods: {
         clickFn () {
-          console.log(this.name)
+          // vue的methods中this应该指向当前实例
+          console.log(this.msg)
         }
       }
     })

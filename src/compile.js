@@ -62,21 +62,11 @@ class Compile {
         let type = attrName.slice(2)
         let expr = attr.value
 
-        // 如果是v-text指令
-        if (type === 'text') {
-          node.textContent = this.vm.$data[expr]
-        }
-        // html指令
-        if (type === 'html') {
-          node.innerHTML = this.vm.$data[expr]
-        }
-        // v-model指令
-        if (type === 'model') {
-          node.value = this.vm.$data[expr]
-        }
         // v-on指令
-        if (type === 'on') {
-          
+        if (this.isEventDirective(type)) {
+          CompileUtils['eventHandler'](node, this.vm, type, expr)
+        } else {
+          CompileUtils[type] && CompileUtils[type](node, this.vm, expr)
         }
       }
     })
@@ -103,5 +93,30 @@ class Compile {
   // 判断是否是指令
   isDirective(attrName) {
     return attrName.startsWith('v-')
+  }
+
+  isEventDirective(attrName) {
+    return attrName.split(':')[0] === 'on'
+  }
+}
+
+/* 对指令的统一处理， */
+let CompileUtils = {
+  text(node, vm, expr) {
+    node.textContent = vm.$data[expr]
+  },
+  html(node, vm, expr) {
+    node.innerHTML = vm.$data[expr]
+  },
+  model(node, vm, expr) {
+    node.value = vm.$data[expr]
+  },
+  eventHandler(node, vm, type, expr) {
+    // 给当前元素注册事件
+    let eventType = type.split(':')[1]
+    let fn = vm.$methods && vm.$methods[expr]
+    if (eventType && fn) {
+      node.addEventListener(eventType, fn.bind(vm))
+    }
   }
 }
